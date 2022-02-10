@@ -1,6 +1,6 @@
 # eAsistent Mobile API Endpoints
 
-*More endpoints comming soon*
+*More endpoints coming soon*
 
 ### Timetable
 
