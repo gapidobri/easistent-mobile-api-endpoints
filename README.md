@@ -2,6 +2,45 @@
 
 *More endpoints coming soon*
 
+### Login
+
+Method: **POST**
+
+URL: `https://www.easistent.com/m/login`
+
+Request:
+
+```json
+{
+    "username": "",
+    "password": "",
+    "supported_user_types": [
+        "parent",
+        "child"
+    ]
+}
+```
+
+Response:
+
+```json
+{
+    "access_token": {
+        "expiration_date": "2022-03-16T12:00:00+0100",
+        "token": ""
+    },
+    "refresh_token": "",
+    "user": {
+        "freshPassword": null,
+        "id": 123456,
+        "language": "sl_SI",
+        "name": "Janez",
+        "type": "child",
+        "username": "12345678"
+    }
+}
+```
+
 ### Timetable
 
 Method: **GET**
