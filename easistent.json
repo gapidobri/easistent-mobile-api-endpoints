@@ -1,0 +1,525 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "eAsistent API",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://www.easistent.com",
+      "description": "eAsistent"
+    }
+  ],
+  "paths": {
+    "/m/login": {
+      "post": {
+        "summary": "Login",
+        "operationId": "post-m-login",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/LoginDto"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/LoginResponse"
+          }
+        },
+        "x-internal": false,
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/m/timetable": {
+      "get": {
+        "summary": "Timetable",
+        "tags": [
+          "Timetable"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TimetableResponse"
+          }
+        },
+        "operationId": "get-m-timetable",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "in": "query",
+            "name": "from",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "in": "query",
+            "name": "to",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/m/refresh_token": {
+      "post": {
+        "summary": "Refresh Token",
+        "operationId": "post-m-refresh_token",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/RefreshTokenResponse"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/RefreshTokenDto"
+        },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/m/me/child": {
+      "get": {
+        "summary": "Child",
+        "tags": [
+          "Child"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ChildResponse"
+          }
+        },
+        "operationId": "get-m-me-child"
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "requestBodies": {
+      "LoginDto": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "",
+              "type": "object",
+              "x-examples": {
+                "example-1": {
+                  "username": "",
+                  "password": "",
+                  "supported_user_types": [
+                    "parent",
+                    "child"
+                  ]
+                }
+              },
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "supported_user_types": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "child",
+                      "parent"
+                    ],
+                    "example": "child"
+                  }
+                }
+              },
+              "required": [
+                "username",
+                "password",
+                "supported_user_types"
+              ]
+            }
+          }
+        }
+      },
+      "RefreshTokenDto": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "",
+              "type": "object",
+              "properties": {
+                "refresh_token": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "refresh_token"
+              ],
+              "x-examples": {
+                "example-1": {
+                  "refresh_token": "<refresh_token>"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "LoginResponse": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "",
+              "type": "object",
+              "x-examples": {
+                "example-1": {
+                  "access_token": {
+                    "expiration_date": "2022-03-16T12:00:00+0100",
+                    "token": ""
+                  },
+                  "refresh_token": "",
+                  "user": {
+                    "freshPassword": null,
+                    "id": 123456,
+                    "language": "sl_SI",
+                    "name": "Janez",
+                    "type": "child",
+                    "username": "12345678"
+                  }
+                }
+              },
+              "properties": {
+                "access_token": {
+                  "type": "object",
+                  "required": [
+                    "expiration_date",
+                    "token"
+                  ],
+                  "properties": {
+                    "expiration_date": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "refresh_token": {
+                  "type": "string"
+                },
+                "user": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "language",
+                    "name",
+                    "type",
+                    "username"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "language": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "type": {
+                      "type": "string",
+                      "minLength": 1,
+                      "enum": [
+                        "child",
+                        "parent"
+                      ]
+                    },
+                    "username": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              },
+              "required": [
+                "access_token",
+                "refresh_token",
+                "user"
+              ]
+            },
+            "examples": {
+              "Example": {
+                "value": {
+                  "access_token": {
+                    "expiration_date": "2022-03-16T12:00:00+0100",
+                    "token": ""
+                  },
+                  "refresh_token": "",
+                  "user": {
+                    "freshPassword": null,
+                    "id": 123456,
+                    "language": "sl_SI",
+                    "name": "Janez",
+                    "type": "child",
+                    "username": "12345678"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "TimetableResponse": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "",
+              "type": "object",
+              "x-examples": {
+                "example-1": {
+                  "events": [
+                    {
+                      "classroom": "106",
+                      "color": "#4b4bbf",
+                      "date": "2021-12-13",
+                      "from": "07:30",
+                      "homework": [],
+                      "lesson": "rekurzija",
+                      "teachers": [
+                        "Janez Novak"
+                      ],
+                      "title": "RPAv",
+                      "title_short": "RPAv",
+                      "to": "08:15",
+                      "type": "school_hour"
+                    }
+                  ]
+                }
+              },
+              "properties": {
+                "events": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "classroom": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "color": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "date": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "from": {
+                        "type": "string",
+                        "minLength": 1,
+                        "format": "time"
+                      },
+                      "lesson": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "teachers": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "title": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "title_short": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "to": {
+                        "type": "string",
+                        "minLength": 1,
+                        "format": "time"
+                      },
+                      "type": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "classroom",
+                      "color",
+                      "date",
+                      "from",
+                      "lesson",
+                      "title",
+                      "title_short",
+                      "to",
+                      "type"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "events"
+              ]
+            },
+            "examples": {
+              "Example": {
+                "value": {
+                  "events": [
+                    {
+                      "classroom": "106",
+                      "color": "#4b4bbf",
+                      "date": "2021-12-13",
+                      "from": "07:30",
+                      "homework": [],
+                      "lesson": "rekurzija",
+                      "teachers": [
+                        "Janez Novak"
+                      ],
+                      "title": "RPAv",
+                      "title_short": "RPAv",
+                      "to": "08:15",
+                      "type": "school_hour"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "RefreshTokenResponse": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "",
+              "type": "object",
+              "properties": {
+                "access_token": {
+                  "type": "object",
+                  "properties": {
+                    "expiration_date": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "token": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "expiration_date",
+                    "token"
+                  ]
+                },
+                "refresh_token": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "access_token",
+                "refresh_token"
+              ],
+              "x-examples": {
+                "example-1": {
+                  "access_token": {
+                    "expiration_date": "<date>",
+                    "token": "<token>"
+                  },
+                  "refresh_token": "<refresh_token>"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ChildResponse": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "Example": {
+                "value": {
+                  "age": 69,
+                  "age_level": "first",
+                  "avatar": null,
+                  "did_try_plus": true,
+                  "display_name": "Janez",
+                  "gender": "m",
+                  "id": 69420,
+                  "language": "sl_SI",
+                  "notifications": [],
+                  "plus_enabled": true,
+                  "short_name": "Jan",
+                  "student_id": 8189753,
+                  "timetable": {
+                    "date": "2021-12-16",
+                    "hours": [
+                      {
+                        "from": "2021-12-16T07:30:00",
+                        "metadata": [],
+                        "summary": "IDE-ZDV",
+                        "to": "2021-12-16T19:35:00",
+                        "type": "event"
+                      },
+                      {
+                        "from": "2021-12-16T19:35:00",
+                        "metadata": {
+                          "tomorrow_end": "13:30",
+                          "tomorrow_info": "Jutri",
+                          "tomorrow_normal": true,
+                          "tomorrow_start": "07:30"
+                        },
+                        "summary": "Konec pouka",
+                        "to": "2021-12-16T23:59:59",
+                        "type": "end_day"
+                      }
+                    ]
+                  },
+                  "trial": false,
+                  "trial_ends": "2022-01-13",
+                  "type": "child"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Token": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "x-app-name": "child",
+  "x-client-platform": "android",
+  "x-client-version": 11101,
+  "security": [
+    {
+      "Token": []
+    }
+  ]
+}
